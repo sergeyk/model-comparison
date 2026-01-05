@@ -695,31 +695,34 @@
     }
 
     function formatPrice(price) {
-      if (price === null || price === undefined) return '<span class="na-value">-</span>';
-      return '$' + price.toFixed(2);
+      if (price === null || price === undefined) return '<span class="na-value" data-order="999999">-</span>';
+      return '<span data-order="' + price + '">$' + price.toFixed(2) + '</span>';
     }
 
     function formatPricePerUnit(price, unit) {
-      if (price === null || price === undefined) return '<span class="na-value">-</span>';
-      return '$' + price.toFixed(3) + unit;
+      if (price === null || price === undefined) return '<span class="na-value" data-order="999999">-</span>';
+      return '<span data-order="' + price + '">$' + price.toFixed(3) + unit + '</span>';
     }
 
     function formatContext(context) {
-      if (!context) return '<span class="na-value">-</span>';
+      if (!context) return '<span class="na-value" data-order="0">-</span>';
+      let display;
       if (context >= 1000000) {
-        return (context / 1000000).toFixed(1) + 'M';
+        display = (context / 1000000).toFixed(1) + 'M';
       } else if (context >= 1000) {
-        return (context / 1000).toFixed(0) + 'K';
+        display = (context / 1000).toFixed(0) + 'K';
+      } else {
+        display = context.toString();
       }
-      return context.toString();
+      return '<span data-order="' + context + '">' + display + '</span>';
     }
 
     function formatBenchmark(value) {
-      if (value === null || value === undefined) return '<span class="na-value">-</span>';
+      if (value === null || value === undefined) return '<span class="na-value" data-order="-1">-</span>';
       let className = 'benchmark-medium';
       if (value >= 80) className = 'benchmark-high';
       else if (value < 60) className = 'benchmark-low';
-      return `<span class="${className}">${value.toFixed(1)}%</span>`;
+      return `<span class="${className}" data-order="${value}">${value.toFixed(1)}%</span>`;
     }
 
     function formatModalities(model) {
@@ -817,7 +820,7 @@
             headers: ['', 'Model', 'Provider', '$/Image', 'Resolutions', 'Quality Tiers', 'Input', 'Release Date'],
             columnDefs: [
               { targets: [0], orderable: false, width: '30px' },
-              { targets: [3], className: 'price-cell' }
+              { targets: [3], className: 'price-cell', type: 'html-num' }
             ],
             defaultSort: [[3, 'asc']]
           };
@@ -826,7 +829,7 @@
             headers: ['', 'Model', 'Provider', '$/Second', 'Max Duration', 'Resolutions', 'Audio', 'Release Date'],
             columnDefs: [
               { targets: [0], orderable: false, width: '30px' },
-              { targets: [3], className: 'price-cell' }
+              { targets: [3], className: 'price-cell', type: 'html-num' }
             ],
             defaultSort: [[3, 'asc']]
           };
@@ -835,7 +838,7 @@
             headers: ['', 'Model', 'Provider', '$/M chars', 'Output $/M', 'Voices', 'Languages', 'Release Date'],
             columnDefs: [
               { targets: [0], orderable: false, width: '30px' },
-              { targets: [3, 4], className: 'price-cell' }
+              { targets: [3, 4], className: 'price-cell', type: 'html-num' }
             ],
             defaultSort: [[3, 'asc']]
           };
@@ -844,8 +847,8 @@
             headers: ['', 'Model', 'Provider', 'Text In $/M', 'Text Out $/M', 'Audio In $/M', 'Audio Out $/M', 'Context', 'Release Date'],
             columnDefs: [
               { targets: [0], orderable: false, width: '30px' },
-              { targets: [3, 4, 5, 6], className: 'price-cell' },
-              { targets: [7], className: 'context-cell' }
+              { targets: [3, 4, 5, 6], className: 'price-cell', type: 'html-num' },
+              { targets: [7], className: 'context-cell', type: 'html-num' }
             ],
             defaultSort: [[5, 'asc']]
           };
@@ -854,9 +857,9 @@
             headers: ['', 'Model', 'Provider', 'Input $/M', 'Output $/M', 'Cache Read', 'Cache Write', 'Context', 'GPQA', 'AIME 2025', 'SWE-bench', 'Modalities', 'Knowledge Cutoff', 'Release Date'],
             columnDefs: [
               { targets: [0], orderable: false, width: '30px' },
-              { targets: [3, 4, 5, 6], className: 'price-cell' },
-              { targets: [7], className: 'context-cell' },
-              { targets: [8, 9, 10], className: 'benchmark-cell' }
+              { targets: [3, 4, 5, 6], className: 'price-cell', type: 'html-num' },
+              { targets: [7], className: 'context-cell', type: 'html-num' },
+              { targets: [8, 9, 10], className: 'benchmark-cell', type: 'html-num' }
             ],
             defaultSort: [[8, 'desc']]
           };
