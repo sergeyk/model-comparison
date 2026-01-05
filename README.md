@@ -2,7 +2,7 @@
 
 I want a simple one-page web app where I can find the best LLM model for my needs.
 
-# v0
+## v0
 
 Make a simple JS web app that has a table of LLM models with their price and benchmark performance.
 
@@ -18,13 +18,20 @@ There should be a filter for capability like "context length > N (slider)", "ima
 
 Use either https://datatables.net or https://tanstack.com/table/latest, whichever is simplest but supports the features we need (seach, filtering column by set of values, filtering column by range, sorting each column)
 
-# v1
+## v1
 
-There should be some pre-built "use cases" like "summarization", "long context retrieval", "chinese language", etc
+There should be a way to compare models. Maybe a star at the start of each row, and the starred models show up in a special table at the top for easy comparison.
 
-# v2
+## v1
 
-Let's do the same for image generation models, too.
+Let's do the same for image generation, video generation, TTS, and realtime voice models, too.
 
-# v3
-There should be a way to compare models.
+## v3
+
+There should be an AI assistant (using the user's own API key which they can paste in to a textbox) that can recommend models based on user needs, e.g. "as capable as gemini-3 but cheaper"
+
+## Maybe later
+
+- Browse modelscope.cn, click into each model, and gather benchmarks
+
+- There should be some pre-built "use cases" like "summarization", "long context retrieval", "chinese language", etc

@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LLM Model Comparison</title>
+
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f5f5f5;
+      color: #333;
+    }
+
+    .container {
+      max-width: 1800px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      color: #1a1a2e;
+    }
+
+    .subtitle {
+      color: #666;
+      font-size: 1rem;
+    }
+
+    .filters {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .filters h3 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      font-size: 1rem;
+      color: #555;
+    }
+
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .filter-group > label {
+      font-size: 0.85rem;
+      color: #666;
+      font-weight: 500;
+    }
+
+    .filter-group input[type="range"] {
+      width: 200px;
+      cursor: pointer;
+    }
+
+    .filter-group .range-value {
+      font-size: 0.9rem;
+      color: #333;
+      font-weight: 600;
+    }
+
+    .checkbox-group {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .checkbox-group label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+
+    .provider-filter {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .provider-filter label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      background: #f0f0f0;
+      transition: background 0.2s;
+    }
+
+    .provider-filter label:hover {
+      background: #e0e0e0;
+    }
+
+    .provider-filter label.selected {
+      background: #d0e8ff;
+    }
+
+    .provider-filter input[type="checkbox"] {
+      width: 14px;
+      height: 14px;
+      cursor: pointer;
+    }
+
+    .table-container {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      overflow-x: auto;
+    }
+
+    #modelsTable {
+      width: 100% !important;
+    }
+
+    #modelsTable thead th {
+      background: #f8f9fa;
+      font-weight: 600;
+      font-size: 0.8rem;
+      white-space: nowrap;
+    }
+
+    #modelsTable tbody td {
+      font-size: 0.85rem;
+      vertical-align: middle;
+    }
+
+    #modelsTable tbody tr:hover {
+      background: #f0f7ff;
+    }
+
+    .provider-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      background: #e3e8ef;
+    }
+
+    .provider-anthropic { background: #d4a574; color: #000; }
+    .provider-openai { background: #74aa9c; color: #000; }
+    .provider-google { background: #4285f4; color: white; }
+    .provider-meta { background: #0668E1; color: white; }
+    .provider-deepseek { background: #6366f1; color: white; }
+    .provider-xai { background: #1a1a2e; color: white; }
+    .provider-mistral { background: #ff7000; color: white; }
+    .provider-alibaba { background: #ff6a00; color: white; }
+    .provider-cohere { background: #39594d; color: white; }
+    .provider-minimax { background: #5c6bc0; color: white; }
+
+    .modality-badge {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 0.75rem;
+      margin-right: 3px;
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    .price-cell {
+      text-align: right;
+      font-family: 'SF Mono', Monaco, monospace;
+      font-size: 0.8rem;
+    }
+
+    .benchmark-cell {
+      text-align: center;
+      font-weight: 500;
+    }
+
+    .benchmark-high { color: #2e7d32; }
+    .benchmark-medium { color: #f57c00; }
+    .benchmark-low { color: #c62828; }
+
+    .context-cell {
+      text-align: right;
+      font-family: 'SF Mono', Monaco, monospace;
+      font-size: 0.8rem;
+    }
+
+    .dataTables_filter {
+      margin-bottom: 15px;
+    }
+
+    .dataTables_filter input {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      width: 250px;
+    }
+
+    .dataTables_length select {
+      padding: 6px 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+    }
+
+    .dataTables_info {
+      font-size: 0.85rem;
+      color: #666;
+    }
+
+    .na-value {
+      color: #999;
+      font-style: italic;
+    }
+
+    @media (max-width: 768px) {
+      .filter-row {
+        flex-direction: column;
+      }
+
+      .filter-group input[type="range"] {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>LLM Model Comparison</h1>
+      <p class="subtitle">Compare pricing and benchmark performance of the latest LLM models</p>
+    </header>
+
+    <div class="filters">
+      <h3>Filters</h3>
+      <div class="filter-row">
+        <div class="filter-group">
+          <label>Providers</label>
+          <div class="provider-filter" id="providerFilter">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+      <div class="filter-row" style="margin-top: 15px;">
+        <div class="filter-group">
+          <label for="contextSlider">Minimum Context Length</label>
+          <input type="range" id="contextSlider" min="0" max="2000000" step="1000" value="32000">
+          <span class="range-value" id="contextValue">32K tokens</span>
+        </div>
+
+        <div class="filter-group">
+          <label>Input Modalities</label>
+          <div class="checkbox-group">
+            <label><input type="checkbox" id="filterImage"> Image</label>
+            <label><input type="checkbox" id="filterVideo"> Video</label>
+            <label><input type="checkbox" id="filterPdf"> PDF</label>
+            <label><input type="checkbox" id="filterAudio"> Audio</label>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <label>Capabilities</label>
+          <div class="checkbox-group">
+            <label><input type="checkbox" id="filterReasoning"> Reasoning</label>
+            <label><input type="checkbox" id="filterOpenWeights"> Open Weights</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <table id="modelsTable" class="display">
+        <thead>
+          <tr>
+            <th>Model</th>
+            <th>Provider</th>
+            <th>Input $/M</th>
+            <th>Output $/M</th>
+            <th>Cache Read</th>
+            <th>Cache Write</th>
+            <th>Context</th>
+            <th>GPQA</th>
+            <th>AIME 2025</th>
+            <th>SWE-bench</th>
+            <th>Modalities</th>
+            <th>Knowledge Cutoff</th>
+            <th>Release Date</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- jQuery and DataTables -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+
+  <script>
+    let modelsData = [];
+    let dataTable;
+    let selectedProviders = new Set();
+
+    function formatPrice(price) {
+      if (price === null || price === undefined) return '<span class="na-value">-</span>';
+      return '$' + price.toFixed(2);
+    }
+
+    function formatContext(context) {
+      if (!context) return '<span class="na-value">-</span>';
+      if (context >= 1000000) {
+        return (context / 1000000).toFixed(1) + 'M';
+      } else if (context >= 1000) {
+        return (context / 1000).toFixed(0) + 'K';
+      }
+      return context.toString();
+    }
+
+    function formatBenchmark(value) {
+      if (value === null || value === undefined) return '<span class="na-value">-</span>';
+      let className = 'benchmark-medium';
+      if (value >= 80) className = 'benchmark-high';
+      else if (value < 60) className = 'benchmark-low';
+      return `<span class="${className}">${value.toFixed(1)}%</span>`;
+    }
+
+    function formatModalities(model) {
+      const mods = [];
+      if (model.supportsImage) mods.push('<span class="modality-badge">Image</span>');
+      if (model.supportsVideo) mods.push('<span class="modality-badge">Video</span>');
+      if (model.supportsPdf) mods.push('<span class="modality-badge">PDF</span>');
+      if (model.supportsAudio) mods.push('<span class="modality-badge">Audio</span>');
+      return mods.length > 0 ? mods.join('') : '<span class="na-value">Text only</span>';
+    }
+
+    function getProviderClass(provider) {
+      const providerLower = provider.toLowerCase();
+      if (providerLower.includes('anthropic')) return 'provider-anthropic';
+      if (providerLower.includes('openai')) return 'provider-openai';
+      if (providerLower.includes('google')) return 'provider-google';
+      if (providerLower.includes('meta')) return 'provider-meta';
+      if (providerLower.includes('deepseek')) return 'provider-deepseek';
+      if (providerLower.includes('xai') || providerLower.includes('x.ai')) return 'provider-xai';
+      if (providerLower.includes('mistral')) return 'provider-mistral';
+      if (providerLower.includes('alibaba')) return 'provider-alibaba';
+      if (providerLower.includes('cohere')) return 'provider-cohere';
+      if (providerLower.includes('minimax')) return 'provider-minimax';
+      return '';
+    }
+
+    function formatProvider(provider) {
+      const cls = getProviderClass(provider);
+      return `<span class="provider-badge ${cls}">${provider}</span>`;
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return '<span class="na-value">-</span>';
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
+    }
+
+    function formatKnowledgeCutoff(dateStr) {
+      if (!dateStr) return '<span class="na-value">-</span>';
+      // Handle "2025-03-31", "2025-03", etc.
+      const parts = dateStr.split('-');
+      if (parts.length >= 2) {
+        const year = parts[0];
+        const monthNum = parseInt(parts[1], 10);
+        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        return `${monthNames[monthNum - 1]} ${year}`;
+      }
+      return dateStr;
+    }
+
+    function buildProviderFilter() {
+      const providers = [...new Set(modelsData.map(m => m.provider))].sort();
+      const container = document.getElementById('providerFilter');
+
+      providers.forEach(provider => {
+        const label = document.createElement('label');
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = true;
+        checkbox.dataset.provider = provider;
+        checkbox.addEventListener('change', (e) => {
+          if (e.target.checked) {
+            selectedProviders.add(provider);
+          } else {
+            selectedProviders.delete(provider);
+          }
+          label.classList.toggle('selected', e.target.checked);
+          applyFilters();
+        });
+
+        selectedProviders.add(provider);
+        label.classList.add('selected');
+        label.appendChild(checkbox);
+        label.appendChild(document.createTextNode(provider));
+        container.appendChild(label);
+      });
+    }
+
+    function applyFilters() {
+      const minContext = parseInt(document.getElementById('contextSlider').value) || 0;
+      const requireImage = document.getElementById('filterImage').checked;
+      const requireVideo = document.getElementById('filterVideo').checked;
+      const requirePdf = document.getElementById('filterPdf').checked;
+      const requireAudio = document.getElementById('filterAudio').checked;
+      const requireReasoning = document.getElementById('filterReasoning').checked;
+      const requireOpenWeights = document.getElementById('filterOpenWeights').checked;
+
+      $.fn.dataTable.ext.search.pop(); // Remove previous filter
+      $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+        const model = modelsData[dataIndex];
+        if (!model) return true;
+
+        // Provider filter
+        if (selectedProviders.size > 0 && !selectedProviders.has(model.provider)) return false;
+
+        // Context length filter (minimum - model must support at least this much)
+        const context = model.contextLength || 0;
+        if (context < minContext) return false;
+
+        // Modality filters
+        if (requireImage && !model.supportsImage) return false;
+        if (requireVideo && !model.supportsVideo) return false;
+        if (requirePdf && !model.supportsPdf) return false;
+        if (requireAudio && !model.supportsAudio) return false;
+
+        // Capability filters
+        if (requireReasoning && !model.reasoning) return false;
+        if (requireOpenWeights && !model.openWeights) return false;
+
+        return true;
+      });
+
+      dataTable.draw();
+    }
+
+    function updateContextLabel() {
+      const value = parseInt(document.getElementById('contextSlider').value);
+      const formatted = formatContext(value);
+      document.getElementById('contextValue').textContent = formatted.replace(/<[^>]*>/g, '') + ' tokens';
+    }
+
+    async function init() {
+      try {
+        const response = await fetch('data/models.json');
+        modelsData = await response.json();
+
+        // Build provider filter
+        buildProviderFilter();
+
+        const tableData = modelsData.map(model => [
+          model.name,
+          formatProvider(model.provider),
+          formatPrice(model.inputPrice),
+          formatPrice(model.outputPrice),
+          formatPrice(model.cacheReadPrice),
+          formatPrice(model.cacheWritePrice),
+          formatContext(model.contextLength),
+          formatBenchmark(model.gpqa),
+          formatBenchmark(model.aime2025),
+          formatBenchmark(model.swebench),
+          formatModalities(model),
+          formatKnowledgeCutoff(model.knowledgeCutoff),
+          formatDate(model.releaseDate)
+        ]);
+
+        dataTable = $('#modelsTable').DataTable({
+          data: tableData,
+          pageLength: 100,
+          order: [[7, 'desc']], // Sort by GPQA descending
+          columnDefs: [
+            { targets: [2, 3, 4, 5], className: 'price-cell' },
+            { targets: [6], className: 'context-cell' },
+            { targets: [7, 8, 9], className: 'benchmark-cell' }
+          ],
+          language: {
+            search: 'Search models:',
+            lengthMenu: 'Show _MENU_ models',
+            info: 'Showing _START_ to _END_ of _TOTAL_ models',
+            infoFiltered: '(filtered from _MAX_ total models)'
+          }
+        });
+
+        // Set up filter event listeners
+        document.getElementById('contextSlider').addEventListener('input', () => {
+          updateContextLabel();
+          applyFilters();
+        });
+
+        ['filterImage', 'filterVideo', 'filterPdf', 'filterAudio', 'filterReasoning', 'filterOpenWeights'].forEach(id => {
+          document.getElementById(id).addEventListener('change', applyFilters);
+        });
+
+        // Initial filter setup
+        applyFilters();
+
+      } catch (error) {
+        console.error('Error loading model data:', error);
+        document.querySelector('.table-container').innerHTML =
+          '<p style="color: red; text-align: center;">Error loading model data. Please run the build script first.</p>';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
