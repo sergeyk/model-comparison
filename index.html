@@ -9,6 +9,160 @@
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
 
   <style>
+    /* Theme CSS Variables */
+    :root {
+      /* Light theme (default) */
+      --bg-primary: #f5f5f5;
+      --bg-secondary: white;
+      --bg-tertiary: #f8f9fa;
+      --text-primary: #333;
+      --text-secondary: #666;
+      --text-tertiary: #555;
+      --text-muted: #999;
+      --border-color: #ddd;
+      --border-light: #e5e7eb;
+      --shadow-color: rgba(0,0,0,0.1);
+      --hover-bg: #f0f7ff;
+      --filter-bg: #f0f0f0;
+      --filter-hover: #e0e0e0;
+      --filter-selected: #d0e8ff;
+      --tab-bg: #e5e7eb;
+      --tab-hover: #d1d5db;
+      --tab-text: #374151;
+      --header-color: #1a1a2e;
+      --comparison-bg: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      --comparison-text: #92400e;
+      --comparison-hover: #fef9c3;
+      --comparison-btn-bg: rgba(255,255,255,0.5);
+      --comparison-btn-border: #d97706;
+      --star-color: #ccc;
+      --star-hover: #fbbf24;
+      --star-active: #f59e0b;
+      --benchmark-high: #2e7d32;
+      --benchmark-medium: #f57c00;
+      --benchmark-low: #c62828;
+      --modality-bg: #e8f5e9;
+      --modality-text: #2e7d32;
+      --type-llm-bg: #e0e7ff;
+      --type-llm-text: #4338ca;
+      --type-image-bg: #d1fae5;
+      --type-image-text: #065f46;
+      --type-video-bg: #fef3c7;
+      --type-video-text: #92400e;
+      --type-tts-bg: #fce7f3;
+      --type-tts-text: #9d174d;
+      --type-realtime-bg: #ede9fe;
+      --type-realtime-text: #5b21b6;
+      --provider-default: #e3e8ef;
+
+      /* DataTables overrides */
+      --dt-row-stripe: #f9f9f9;
+      --dt-row-hover: #f0f7ff;
+      --dt-border: #ddd;
+    }
+
+    /* Dark theme */
+    [data-theme="dark"] {
+      --bg-primary: #1a1a2e;
+      --bg-secondary: #16213e;
+      --bg-tertiary: #1f2937;
+      --text-primary: #e5e7eb;
+      --text-secondary: #9ca3af;
+      --text-tertiary: #d1d5db;
+      --text-muted: #6b7280;
+      --border-color: #374151;
+      --border-light: #374151;
+      --shadow-color: rgba(0,0,0,0.3);
+      --hover-bg: #1e3a5f;
+      --filter-bg: #374151;
+      --filter-hover: #4b5563;
+      --filter-selected: #1e3a5f;
+      --tab-bg: #374151;
+      --tab-hover: #4b5563;
+      --tab-text: #e5e7eb;
+      --header-color: #f9fafb;
+      --comparison-bg: linear-gradient(135deg, #422006 0%, #78350f 100%);
+      --comparison-text: #fcd34d;
+      --comparison-hover: #451a03;
+      --comparison-btn-bg: rgba(0,0,0,0.3);
+      --comparison-btn-border: #fbbf24;
+      --star-color: #4b5563;
+      --star-hover: #fbbf24;
+      --star-active: #f59e0b;
+      --benchmark-high: #4ade80;
+      --benchmark-medium: #fb923c;
+      --benchmark-low: #f87171;
+      --modality-bg: #064e3b;
+      --modality-text: #6ee7b7;
+      --type-llm-bg: #312e81;
+      --type-llm-text: #a5b4fc;
+      --type-image-bg: #064e3b;
+      --type-image-text: #6ee7b7;
+      --type-video-bg: #78350f;
+      --type-video-text: #fcd34d;
+      --type-tts-bg: #831843;
+      --type-tts-text: #f9a8d4;
+      --type-realtime-bg: #4c1d95;
+      --type-realtime-text: #c4b5fd;
+      --provider-default: #374151;
+
+      /* DataTables overrides */
+      --dt-row-stripe: #1f2937;
+      --dt-row-hover: #1e3a5f;
+      --dt-border: #374151;
+    }
+
+    /* System preference detection */
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg-primary: #1a1a2e;
+        --bg-secondary: #16213e;
+        --bg-tertiary: #1f2937;
+        --text-primary: #e5e7eb;
+        --text-secondary: #9ca3af;
+        --text-tertiary: #d1d5db;
+        --text-muted: #6b7280;
+        --border-color: #374151;
+        --border-light: #374151;
+        --shadow-color: rgba(0,0,0,0.3);
+        --hover-bg: #1e3a5f;
+        --filter-bg: #374151;
+        --filter-hover: #4b5563;
+        --filter-selected: #1e3a5f;
+        --tab-bg: #374151;
+        --tab-hover: #4b5563;
+        --tab-text: #e5e7eb;
+        --header-color: #f9fafb;
+        --comparison-bg: linear-gradient(135deg, #422006 0%, #78350f 100%);
+        --comparison-text: #fcd34d;
+        --comparison-hover: #451a03;
+        --comparison-btn-bg: rgba(0,0,0,0.3);
+        --comparison-btn-border: #fbbf24;
+        --star-color: #4b5563;
+        --star-hover: #fbbf24;
+        --star-active: #f59e0b;
+        --benchmark-high: #4ade80;
+        --benchmark-medium: #fb923c;
+        --benchmark-low: #f87171;
+        --modality-bg: #064e3b;
+        --modality-text: #6ee7b7;
+        --type-llm-bg: #312e81;
+        --type-llm-text: #a5b4fc;
+        --type-image-bg: #064e3b;
+        --type-image-text: #6ee7b7;
+        --type-video-bg: #78350f;
+        --type-video-text: #fcd34d;
+        --type-tts-bg: #831843;
+        --type-tts-text: #f9a8d4;
+        --type-realtime-bg: #4c1d95;
+        --type-realtime-text: #c4b5fd;
+        --provider-default: #374151;
+        --dt-row-stripe: #1f2937;
+        --dt-row-hover: #1e3a5f;
+        --dt-border: #374151;
+      }
+    }
+
     * {
       box-sizing: border-box;
     }
@@ -17,8 +171,9 @@
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
       margin: 0;
       padding: 20px;
-      background: #f5f5f5;
-      color: #333;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      transition: background-color 0.3s, color 0.3s;
     }
 
     .container {
@@ -34,27 +189,27 @@
     h1 {
       font-size: 2rem;
       margin-bottom: 0.5rem;
-      color: #1a1a2e;
+      color: var(--header-color);
     }
 
     .subtitle {
-      color: #666;
+      color: var(--text-secondary);
       font-size: 1rem;
     }
 
     .filters {
-      background: white;
+      background: var(--bg-secondary);
       padding: 20px;
       border-radius: 8px;
       margin-bottom: 20px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 4px var(--shadow-color);
     }
 
     .filters h3 {
       margin-top: 0;
       margin-bottom: 15px;
       font-size: 1rem;
-      color: #555;
+      color: var(--text-tertiary);
     }
 
     .filter-row {
@@ -72,7 +227,7 @@
 
     .filter-group > label {
       font-size: 0.85rem;
-      color: #666;
+      color: var(--text-secondary);
       font-weight: 500;
     }
 
@@ -83,7 +238,7 @@
 
     .filter-group .range-value {
       font-size: 0.9rem;
-      color: #333;
+      color: var(--text-primary);
       font-weight: 600;
     }
 
@@ -121,16 +276,16 @@
       border-radius: 4px;
       cursor: pointer;
       font-size: 0.85rem;
-      background: #f0f0f0;
+      background: var(--filter-bg);
       transition: background 0.2s;
     }
 
     .provider-filter label:hover {
-      background: #e0e0e0;
+      background: var(--filter-hover);
     }
 
     .provider-filter label.selected {
-      background: #d0e8ff;
+      background: var(--filter-selected);
     }
 
     .provider-filter input[type="checkbox"] {
@@ -140,10 +295,10 @@
     }
 
     .table-container {
-      background: white;
+      background: var(--bg-secondary);
       padding: 20px;
       border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 4px var(--shadow-color);
       overflow-x: auto;
     }
 
@@ -152,7 +307,7 @@
     }
 
     #modelsTable thead th {
-      background: #f8f9fa;
+      background: var(--bg-tertiary);
       font-weight: 600;
       font-size: 0.8rem;
       white-space: nowrap;
@@ -164,7 +319,7 @@
     }
 
     #modelsTable tbody tr:hover {
-      background: #f0f7ff;
+      background: var(--hover-bg);
     }
 
     .provider-badge {
@@ -173,7 +328,7 @@
       border-radius: 4px;
       font-size: 0.8rem;
       font-weight: 500;
-      background: #e3e8ef;
+      background: var(--provider-default);
     }
 
     .provider-anthropic { background: #d4a574; color: #000; }
@@ -193,8 +348,8 @@
       border-radius: 3px;
       font-size: 0.75rem;
       margin-right: 3px;
-      background: #e8f5e9;
-      color: #2e7d32;
+      background: var(--modality-bg);
+      color: var(--modality-text);
     }
 
     .price-cell {
@@ -208,9 +363,9 @@
       font-weight: 500;
     }
 
-    .benchmark-high { color: #2e7d32; }
-    .benchmark-medium { color: #f57c00; }
-    .benchmark-low { color: #c62828; }
+    .benchmark-high { color: var(--benchmark-high); }
+    .benchmark-medium { color: var(--benchmark-medium); }
+    .benchmark-low { color: var(--benchmark-low); }
 
     .context-cell {
       text-align: right;
@@ -224,25 +379,29 @@
 
     .dataTables_filter input {
       padding: 8px 12px;
-      border: 1px solid #ddd;
+      border: 1px solid var(--border-color);
       border-radius: 6px;
       font-size: 0.9rem;
       width: 250px;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
     }
 
     .dataTables_length select {
       padding: 6px 10px;
-      border: 1px solid #ddd;
+      border: 1px solid var(--border-color);
       border-radius: 6px;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
     }
 
     .dataTables_info {
       font-size: 0.85rem;
-      color: #666;
+      color: var(--text-secondary);
     }
 
     .na-value {
-      color: #999;
+      color: var(--text-muted);
       font-style: italic;
     }
 
@@ -261,13 +420,13 @@
       cursor: pointer;
       font-size: 0.9rem;
       font-weight: 500;
-      background: #e5e7eb;
-      color: #374151;
+      background: var(--tab-bg);
+      color: var(--tab-text);
       transition: all 0.2s;
     }
 
     .model-type-tab:hover {
-      background: #d1d5db;
+      background: var(--tab-hover);
     }
 
     .model-type-tab.active {
@@ -290,11 +449,11 @@
       text-transform: uppercase;
     }
 
-    .type-llm { background: #e0e7ff; color: #4338ca; }
-    .type-image { background: #d1fae5; color: #065f46; }
-    .type-video { background: #fef3c7; color: #92400e; }
-    .type-tts { background: #fce7f3; color: #9d174d; }
-    .type-realtime { background: #ede9fe; color: #5b21b6; }
+    .type-llm { background: var(--type-llm-bg); color: var(--type-llm-text); }
+    .type-image { background: var(--type-image-bg); color: var(--type-image-text); }
+    .type-video { background: var(--type-video-bg); color: var(--type-video-text); }
+    .type-tts { background: var(--type-tts-bg); color: var(--type-tts-text); }
+    .type-realtime { background: var(--type-realtime-bg); color: var(--type-realtime-text); }
 
     .llm-filters, .specialized-filters {
       display: none;
@@ -308,7 +467,7 @@
     .star-btn {
       cursor: pointer;
       font-size: 1.2rem;
-      color: #ccc;
+      color: var(--star-color);
       background: none;
       border: none;
       padding: 0;
@@ -317,19 +476,19 @@
     }
 
     .star-btn:hover {
-      color: #fbbf24;
+      color: var(--star-hover);
     }
 
     .star-btn.starred {
-      color: #f59e0b;
+      color: var(--star-active);
     }
 
     .comparison-section {
-      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      background: var(--comparison-bg);
       padding: 20px;
       border-radius: 8px;
       margin-bottom: 20px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 4px var(--shadow-color);
       display: none;
     }
 
@@ -340,7 +499,7 @@
     .comparison-section h3 {
       margin: 0 0 15px 0;
       font-size: 1rem;
-      color: #92400e;
+      color: var(--comparison-text);
       display: flex;
       align-items: center;
       gap: 8px;
@@ -348,15 +507,15 @@
 
     .comparison-section h3::before {
       content: '★';
-      color: #f59e0b;
+      color: var(--star-active);
     }
 
     .clear-comparison {
       margin-left: auto;
       font-size: 0.8rem;
-      color: #92400e;
-      background: rgba(255,255,255,0.5);
-      border: 1px solid #d97706;
+      color: var(--comparison-text);
+      background: var(--comparison-btn-bg);
+      border: 1px solid var(--comparison-btn-border);
       border-radius: 4px;
       padding: 4px 10px;
       cursor: pointer;
@@ -364,31 +523,31 @@
     }
 
     .clear-comparison:hover {
-      background: rgba(255,255,255,0.8);
+      background: var(--bg-secondary);
     }
 
     #comparisonTable {
       width: 100%;
-      background: white;
+      background: var(--bg-secondary);
       border-radius: 6px;
       overflow: hidden;
     }
 
     #comparisonTable thead th {
-      background: #f8f9fa;
+      background: var(--bg-tertiary);
       font-weight: 600;
       font-size: 0.8rem;
       white-space: nowrap;
       padding: 10px 8px;
       text-align: left;
-      border-bottom: 2px solid #e5e7eb;
+      border-bottom: 2px solid var(--border-light);
     }
 
     #comparisonTable tbody td {
       font-size: 0.85rem;
       vertical-align: middle;
       padding: 10px 8px;
-      border-bottom: 1px solid #e5e7eb;
+      border-bottom: 1px solid var(--border-light);
     }
 
     #comparisonTable tbody tr:last-child td {
@@ -396,7 +555,7 @@
     }
 
     #comparisonTable tbody tr:hover {
-      background: #fef9c3;
+      background: var(--comparison-hover);
     }
 
     #comparisonTable .price-cell {
@@ -416,6 +575,95 @@
       font-weight: 500;
     }
 
+    /* Theme toggle button */
+    .theme-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-primary);
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .theme-toggle:hover {
+      background: var(--filter-hover);
+    }
+
+    .theme-toggle-label {
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    /* DataTables dark mode overrides */
+    table.dataTable thead th,
+    table.dataTable thead td {
+      border-bottom: 1px solid var(--dt-border) !important;
+    }
+
+    table.dataTable.no-footer {
+      border-bottom: 1px solid var(--dt-border) !important;
+    }
+
+    table.dataTable tbody tr {
+      background-color: var(--bg-secondary) !important;
+    }
+
+    table.dataTable.stripe tbody tr.odd,
+    table.dataTable.display tbody tr.odd {
+      background-color: var(--dt-row-stripe) !important;
+    }
+
+    table.dataTable.hover tbody tr:hover,
+    table.dataTable.display tbody tr:hover {
+      background-color: var(--dt-row-hover) !important;
+    }
+
+    table.dataTable tbody td {
+      color: var(--text-primary);
+    }
+
+    table.dataTable thead th {
+      color: var(--text-primary);
+    }
+
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_filter,
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_processing,
+    .dataTables_wrapper .dataTables_paginate {
+      color: var(--text-primary);
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+      color: var(--text-primary) !important;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color) !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+      background: var(--filter-hover) !important;
+      color: var(--text-primary) !important;
+      border: 1px solid var(--border-color) !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+      background: var(--filter-selected) !important;
+      color: var(--text-primary) !important;
+      border: 1px solid var(--border-color) !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+      color: var(--text-muted) !important;
+    }
+
     @media (max-width: 768px) {
       .filter-row {
         flex-direction: column;
@@ -424,12 +672,25 @@
       .filter-group input[type="range"] {
         width: 100%;
       }
+
+      .theme-toggle {
+        position: static;
+        margin: 0 auto 20px;
+      }
+
+      header {
+        padding-top: 0;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <span class="theme-icon">🌙</span>
+        <span class="theme-toggle-label">Dark</span>
+      </button>
       <h1>AI Model Comparison</h1>
       <p class="subtitle">Compare pricing and capabilities of AI models</p>
     </header>
@@ -537,6 +798,61 @@
   <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 
   <script>
+    // Theme management
+    function getSystemTheme() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    function getStoredTheme() {
+      return localStorage.getItem('theme');
+    }
+
+    function getCurrentTheme() {
+      const stored = getStoredTheme();
+      if (stored) return stored;
+      return getSystemTheme();
+    }
+
+    function applyTheme(theme) {
+      const root = document.documentElement;
+      const toggle = document.getElementById('themeToggle');
+      const icon = toggle?.querySelector('.theme-icon');
+      const label = toggle?.querySelector('.theme-toggle-label');
+
+      if (theme === 'dark') {
+        root.setAttribute('data-theme', 'dark');
+        if (icon) icon.textContent = '☀️';
+        if (label) label.textContent = 'Light';
+      } else {
+        root.setAttribute('data-theme', 'light');
+        if (icon) icon.textContent = '🌙';
+        if (label) label.textContent = 'Dark';
+      }
+    }
+
+    function toggleTheme() {
+      const current = getCurrentTheme();
+      const newTheme = current === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('theme', newTheme);
+      applyTheme(newTheme);
+    }
+
+    // Apply theme immediately to prevent flash
+    (function() {
+      const theme = getCurrentTheme();
+      if (theme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+
+    // Listen for system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      // Only respond to system changes if user hasn't set a preference
+      if (!getStoredTheme()) {
+        applyTheme(e.matches ? 'dark' : 'light');
+      }
+    });
+
     let modelsData = [];
     let dataTable;
     let selectedProviders = new Set();
@@ -1055,6 +1371,10 @@
 
     async function init() {
       try {
+        // Initialize theme
+        applyTheme(getCurrentTheme());
+        document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
         // Load starred models from localStorage first
         loadStarredModels();
 

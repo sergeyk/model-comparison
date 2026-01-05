@@ -30,6 +30,15 @@ npm run build    # generate data/models.json from models.dev submodule
 npm run serve    # serve on port 8888
 ```
 
+## Updating Model Data
+
+To refresh the model data with the latest from upstream:
+
+```bash
+git submodule update --remote   # pull latest models.dev data
+npm run update-models           # regenerate data/models.json
+```
+
 ## Data Sources
 
 - Model metadata: [models.dev](https://github.com/anomalyco/models.dev) (git submodule)
