@@ -820,7 +820,7 @@
             headers: ['', 'Model', 'Provider', '$/Image', 'Resolutions', 'Quality Tiers', 'Input', 'Release Date'],
             columnDefs: [
               { targets: [0], orderable: false, width: '30px' },
-              { targets: [3], className: 'price-cell', type: 'html-num' }
+              { targets: [3], className: 'price-cell' }
             ],
             defaultSort: [[3, 'asc']]
           };
@@ -829,7 +829,7 @@
             headers: ['', 'Model', 'Provider', '$/Second', 'Max Duration', 'Resolutions', 'Audio', 'Release Date'],
             columnDefs: [
               { targets: [0], orderable: false, width: '30px' },
-              { targets: [3], className: 'price-cell', type: 'html-num' }
+              { targets: [3], className: 'price-cell' }
             ],
             defaultSort: [[3, 'asc']]
           };
@@ -838,7 +838,7 @@
             headers: ['', 'Model', 'Provider', '$/M chars', 'Output $/M', 'Voices', 'Languages', 'Release Date'],
             columnDefs: [
               { targets: [0], orderable: false, width: '30px' },
-              { targets: [3, 4], className: 'price-cell', type: 'html-num' }
+              { targets: [3, 4], className: 'price-cell' }
             ],
             defaultSort: [[3, 'asc']]
           };
@@ -847,8 +847,8 @@
             headers: ['', 'Model', 'Provider', 'Text In $/M', 'Text Out $/M', 'Audio In $/M', 'Audio Out $/M', 'Context', 'Release Date'],
             columnDefs: [
               { targets: [0], orderable: false, width: '30px' },
-              { targets: [3, 4, 5, 6], className: 'price-cell', type: 'html-num' },
-              { targets: [7], className: 'context-cell', type: 'html-num' }
+              { targets: [3, 4, 5, 6], className: 'price-cell' },
+              { targets: [7], className: 'context-cell' }
             ],
             defaultSort: [[5, 'asc']]
           };
@@ -857,9 +857,9 @@
             headers: ['', 'Model', 'Provider', 'Input $/M', 'Output $/M', 'Cache Read', 'Cache Write', 'Context', 'GPQA', 'AIME 2025', 'SWE-bench', 'Modalities', 'Knowledge Cutoff', 'Release Date'],
             columnDefs: [
               { targets: [0], orderable: false, width: '30px' },
-              { targets: [3, 4, 5, 6], className: 'price-cell', type: 'html-num' },
-              { targets: [7], className: 'context-cell', type: 'html-num' },
-              { targets: [8, 9, 10], className: 'benchmark-cell', type: 'html-num' }
+              { targets: [3, 4, 5, 6], className: 'price-cell' },
+              { targets: [7], className: 'context-cell' },
+              { targets: [8, 9, 10], className: 'benchmark-cell' }
             ],
             defaultSort: [[8, 'desc']]
           };
