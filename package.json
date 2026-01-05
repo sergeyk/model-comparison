@@ -6,7 +6,8 @@
   "scripts": {
     "build": "node build-data.js",
     "serve": "python3 -m http.server 8888",
-    "start": "npm run build && npm run serve"
+    "start": "npm run serve",
+    "update-models": "node build-data.js"
   },
   "keywords": [],
   "author": "",
