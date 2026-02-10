@@ -320,6 +320,42 @@
     "hle": null
   },
   {
+    "id": "claude-opus-4-6",
+    "name": "Claude Opus 4.6",
+    "provider": "Anthropic",
+    "providerId": "anthropic",
+    "family": "claude-opus",
+    "releaseDate": "2026-02-05",
+    "lastUpdated": "2026-02-05",
+    "reasoning": true,
+    "toolCall": true,
+    "structuredOutput": false,
+    "openWeights": false,
+    "inputPrice": 5,
+    "outputPrice": 25,
+    "cacheReadPrice": 0.5,
+    "cacheWritePrice": 6.25,
+    "knowledgeCutoff": "2025-05-31",
+    "contextLength": 1000000,
+    "outputLimit": 128000,
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "supportsImage": true,
+    "supportsVideo": false,
+    "supportsPdf": true,
+    "supportsAudio": false,
+    "gpqa": 91.3,
+    "aime2025": null,
+    "swebench": 80.8,
+    "hle": 36.7
+  },
+  {
     "id": "claude-opus-4-5",
     "name": "Claude Opus 4.5",
     "provider": "Anthropic",
